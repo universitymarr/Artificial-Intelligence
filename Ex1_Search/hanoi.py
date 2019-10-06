@@ -202,12 +202,6 @@ class Hanoi:
                             f=new_gscore+h
 
 
-
-
-
-
-
-
 state_initial = Hanoi.list_initial(numTowers)
 state_goal = Hanoi.list_goal(numTowers)
 final_path,num= Hanoi.find_path(state_initial, state_goal)
