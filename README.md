@@ -6,3 +6,4 @@
 | Homework  | No |  |
 | Notes  | No | |
 | Slides | Yes | 2019 |
+| Book | Yes | |
