@@ -1,0 +1,65 @@
+Hotel
+
+(define (domain hotel)
+	(:requirements
+	 :strips
+	 :negative-preconditions
+	 )
+	 
+	 (:predicates (robot ?x)(position ?x)(at ?x ?y)(adjCell ?x ?y)(crossableCell ?x)(cleanableRoom ?x)
+	 )
+	 
+	 (:action move
+		 :parameters(?who ?from ?to)
+		 :precondition(and
+		 (robot ?who)
+		 (position ?from)
+		 (position ?to)
+		 (at ?who ?from)
+		 (not(at ?who ?to))
+		 (adjCell ?from ?to)
+		 (crossableCell ?to)
+		 )
+		 :effect(and
+		 (not(at ?who ?from))
+		 (at ?who ?to)
+		 )
+	 )
+	 
+	 (:action clean
+		 :parameters(?who ?from ?to)
+		 :precondition(and
+		 (robot ?who)
+		 (position ?from)
+		 (position ?to)
+		 (at ?who ?from)
+		 (not(at ?who ?to))
+		 (adjCell ?from ?to)
+		 (cleanableRoom ?to)
+		 )
+		 
+		 :effect(and
+		 (not(cleanableRoom ?to))
+		 )
+	 )
+)
+
+(define (problem hotel)
+	(:domain hotel)
+	(:objects robot p11 p12 p13 p21 p22 p23 p31 p32 p33 p41 p42 p43)
+    (:init (robot robot)(position p11)(position p12)(position p13)(position p21)(position p22)(position p23)
+		   (position p31)(position p32)(position p33)(position p41)(position p42)(position p43)
+		   (adjCell p11 p21)(adjCell p21 p11)(adjCell p21 p22)(adjCell p22 p21)(adjCell p21 p31)(adjCell p31 p21)
+		   (adjCell p22 p12)(adjCell p12 p22)(adjCell p22 p23)(adjCell p23 p22)(adjCell p22 p32)(adjCell p32 p22)
+		   (adjCell p23 p13)(adjCell p13 p23)(adjCell p23 p33)(adjCell p33 p23)
+		   (adjCell p31 p32)(adjCell p32 p31)(adjCell p31 p41)(adjCell p41 p31)
+		   (adjCell p32 p33)(adjCell p33 p32)(adjCell p32 p42)(adjCell p42 p32)
+		   (adjCell p33 p43)(adjCell p43 p33)
+		   (crossableCell p21)(crossableCell p22)(crossableCell p23)
+		   (crossableCell p31)(crossableCell p32)(crossableCell p33)
+		   (cleanableRoom p12)(cleanableRoom p43)
+	)
+	(:goal (and(not(cleanableRoom p12))(not(cleanableRoom p43)))
+	)
+)
+	 

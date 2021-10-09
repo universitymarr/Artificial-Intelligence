@@ -1,0 +1,62 @@
+define( domain(WCS)
+(:requirements
+ :strips
+ :negative-preconditions
+ :equality)
+ (:predicates (wolf ?x)(sheep ?x)(cabbage ?x)(boat ?x)(at x?y?)(river ?x))
+
+ )
+ 
+(:action moveWolf
+:parameters(?from ?to)
+:precondition (and(river ?from)(river ?to)(at boat ?from)(at wolf ?from)
+(not(and(at sheep ?from)(at cabbage ?from))))
+:effect (and 
+ (not(at boat ?from))(at boat ?to)
+ (not(at wolf ?from))(at wolf ?to))
+) 
+
+(:action moveCabbage
+:parameters(?from ?to)
+:precondition (and(river ?from)(river ?to)(at boat ?from)(at cabbage ?from)
+(not(and(at sheep ?from)(at wolf ?from))))
+:effect (and 
+ (not(at boat ?from))(at boat ?to)
+ (not(at cabbage ?from))(at cabbage ?to))
+) 
+
+(:action moveSheep
+:parameters(?from ?to)
+:precondition (and(river ?from)(river ?to)(at boat ?from)(at sheep ?from))
+:effect (and 
+ (not(at boat ?from))(at boat ?to)
+ (not(at wolf ?from))(at wolf ?to))
+) 
+
+(:action moveNothing
+:parameters (?from ?to)
+:precondition (and (side ?from) (side ?to) (at farmer ?from)
+(not (and (at wolf ?from)(at sheep ?from)))
+(not (and (at sheep ?from)(at gabbage ?from))))
+:effect (and (not (at farmer ?from)) (at farmer ?to))
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

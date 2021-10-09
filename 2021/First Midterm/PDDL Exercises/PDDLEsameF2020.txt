@@ -1,0 +1,170 @@
+Space
+
+
+
+
+
+
+(define (domain Space)
+
+	(:requirements
+	 :strips
+	 :negative-preconditions
+	 :equality
+	)
+	
+	(:predicates (ships ?x)(position ?x) (at ?x ?y)(theresEnemy ?x)
+				 (possiblePos ?x ?y)(adjCell ?x ?y)(winners ?x ?y)
+	
+	)
+	
+	(:action move&kill
+	  :parameters(?who ?whoo ?from  ?fromm ?to ?too)
+	  :precondition(and
+	  (ships ?who)
+	  (ships ?whoo)
+	  (position ?from)
+	  (position ?to)
+	  (position ?fromm)
+	  (position ?too)
+	  (at ?who ?from)
+	  (not(at ?who ?to))
+	  (at ?whoo ?fromm)
+	  (not(at ?whoo ?too))
+	  (possiblePos ?who ?to)
+	  (adjCell ?from ?to) 
+	  (possiblePos ?whoo ?too)
+	   (adjCell ?fromm ?too) 
+	  (not(= ?who ?whoo))
+	  
+	  )
+	  :effect(and
+	  (not(at ?who ?from))
+	  (at ?who ?to)
+	  (not(at ?whoo ?fromm))
+	  (at ?whoo ?too)
+	  (not(theresEnemy ?to))
+	  (not(theresEnemy ?too))
+	  
+	  )
+	)
+	
+	(:action grab
+	  :parameters(?who ?whoo ?to ?too)
+	  :precondition(and
+	  (ships ?who)
+	  (ships ?whoo)
+	  (position ?to)
+	  (position ?too)
+	  (at ?who ?to)
+	  (at ?whoo ?too)
+	  (possiblePos ?who ?to)
+	  (possiblePos ?whoo ?too)
+	  (not(theresEnemy pos1))
+	  (not(theresEnemy pos2))
+	  (not(theresEnemy posz))
+	  (not(theresEnemy posy))
+	  (not(= ?who ?whoo))
+	  
+	  )
+	  :effect(winners ?who ?whoo)
+	)
+)
+	
+	
+(define (problem Space)
+ (:domain Space)
+ (:objects ro boo pos1 pos2 pos3 posz posy posx)
+ (:init (ships ro)(ships boo)(position pos1)(position pos2)(position pos3)
+        (position posz)(position posy)(position posx)
+		(possiblePos ro posz)(possiblePos ro posy)(possiblePos ro posx)
+		(possiblePos boo pos1)(possiblePos boo pos2)(possiblePos boo pos3)
+		(adjCell posz posy)(adjCell posy posz)(adjCell posy posx)(adjCell posx posy)
+		(adjCell pos1 pos2)(adjCell pos2 pos1)(adjCell pos2 pos3)(adjCell pos3 pos2)
+		(theresEnemy posy)
+		(theresEnemy pos1)(theresEnemy pos2)
+		(at ro posz)(at boo pos1)
+		
+ )
+ (:goal(and (at ro posx)(at boo pos3)(winners ro boo))
+ )
+)
+
+-------------------------------------------------------------------
+
+0: move&kill(ro boo posz pos1 posy pos2)
+1: move&kill(ro boo posy pos2 posz pos1)
+2: move&kill(ro boo posz pos1 posy pos2)
+3: move&kill(ro boo posy pos2 posx pos3)
+4: grab(ro boo posx pos3)
+ 
+Things like possiblePos,adjCell or the definition of the objects never change so I will not write them down for each action.
+ 
+init
+		(ships ro)(ships boo)(position pos1)(position pos2)(position pos3)
+        (position posz)(position posy)(position posx)
+		(possiblePos ro posz)(possiblePos ro posy)(possiblePos ro posx)
+		(possiblePos boo pos1)(possiblePos boo pos2)(possiblePos boo pos3)
+		(adjCell posz posy)(adjCell posy posz)(adjCell posy posx)(adjCell posx posy)
+		(adjCell pos1 pos2)(adjCell pos2 pos1)(adjCell pos2 pos3)(adjCell pos3 pos2)
+		(theresEnemy posy)
+		(theresEnemy pos1)(theresEnemy pos2)
+		(at ro posz)(at boo pos1)
+		
+0:
+		(theresEnemy pos1)
+		(at ro posy)(at boo pos2)
+		
+1:
+		(at ro posz)(at boo pos1)
+		
+2:
+		(at ro posy)(at boo pos2)
+		
+3:
+		(at ro posx)(at boo pos3)
+
+4:
+		(winners ro boo)
+		
+-------------------------------------
+2)Define the notion of heuristics for heuristic search, providing examples. Sketch the main techniques to
+obtain heuristics for a given search problem.
+
+Without previous information is very difficult to solve interesting problems. So, we approach them with heuristic algorithms. 
+A heuristic is an estimation of the cost from a node to the closest goal node. 
+A heuristic is admissible if it always underestimates the real cost to reach the closest goal node. 
+Admissible heuristics can be derived from the exact solution cost of a relaxed version of the problem. 
+
+
+
+Greedy best-first search is a heuristic search algorithm which expands first the nodes with lowest h(n), 
+thus the nodes that appears to be the closest to the solution and that can lead to it more quickly. 
+
+A* is the most used informed algorithm. 
+It is based on the evaluation function f(n) = g(n) + h(n) where g is the cost for having reached the node n and h is the underestimated cost for reaching a goal from that node. 
+The search proceeds visiting nodes with lowest f(n). 
+
+IDA* gives us the benefits of A* but without the requirement to keep all reached states in memory, at a cost of visiting same states multiple times. 
+
+RBFS resembles a recursive depth-first search, but rather then continuing indefinitely down the current path, 
+it uses the f-limit variable to keep track of the f-value of the best alternative path available from any ancestor of the current node. 
+
+SMA* it proceeds just like A*, expanding the best nodes until memory is full.
+
+3)Discuss the difference between state-space and plan-space planning. Describe the basic approach to plan
+space planning (POP). Discuss the application of POP planning to the problem presented in the previous
+exercise.
+
+State space is a transition from a state A to a state B will be caused by the addition of an action which will follow the action that had led to the state A.
+Instead in the plan space a transition to another node corresponds to inserting an action in the plan that has not to be strictly the following of the previous.
+In this representation actions can be in every point of the plan, without a sequential order.
+
+The POP search procedure proceeds as follows:
+The initial plan is composed only by the Start action and the Finish action, specifying that the start < finish (start comes before then finish)
+Pick the open precondition p of an action B and look for an action A whose effect satisfies p.
+Add the causal link A -> p -> B and specify the ordering A<B (A comes before then B).
+In addition to this if A is a new action add the orderings Start<A, B<Finish
+Run the goal test which would succeeds if there are no more open preconditions.
+Solve conflicts, otherwise backtrack.
+

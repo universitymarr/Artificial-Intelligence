@@ -1,0 +1,108 @@
+Se un elemento X è membro della lista passata (T/F)
+
+member1(X, [X|_]).
+member1(X, [_|Ys]) :- member1(X, Ys).
+
+
+Se un elemento X è membro di una lista di liste
+
+memberList(X, [[X|_Xs]|_Rest]).
+memberList(X, [[_Y|Xs]|_Rest]) :- member1(X,Xs).
+memberList(X, [[]|Rest]) :- memberList(X, Rest).
+
+
+Appende in coda Y ad X|Xs
+
+append1([], Y, Y).
+append1([X|Xs], Y, [X|Zs]) :- append1(Xs, Y, Zs).
+
+
+Reverse (abc -> cba)
+
+reverse1([], []).
+reverse1([X], [X]).
+reverse1(Xs, [Z|Zs]) :- append1(Ys, [Z], Xs), reverse1(Ys, Zs).
+
+Cancella elemento (dato X) di una lista e torna lista senza elemento
+
+delete1(X, [X|Xs], Xs).
+delete1(X, [Y|Ys], [Y|Zs]) :- delete1(X, Ys, Zs).
+
+Cancella l'ultimo elemento di una lista e torna lista senza elemento
+
+deleteLast([], []).
+deleteLast([_X], []).
+deleteLast([X|Rest], [X|Result]) :- deleteLast(Rest, Result).
+
+
+Ordina crescente
+
+sorting1(Xs, Ys) :- permutation1(Xs, Ys), ordered1(Ys).
+
+ordered1([]).
+ordered1([_]).
+ordered1([X,Y|Zs]) :- X=<Y, ordered1([Y|Zs]).
+
+permutation1([], []).
+permutation1([X|Xs], Ys) :- delete1(X, Ys, Yn), permutation1(Yn, Xs).
+
+delete1(X, [X|Xs], Xs).
+delete1(X, [Y|Ys], [Y|Zs]) :- delete1(X, Ys, Zs).
+
+Verifica se è un albero binario
+
+binarytree(void).
+binarytree(tree(_X, Left, Right)) :- binarytree(Left), binarytree(Right).
+
+Verifica se X è membro dell'albero
+memberTree(X, tree(X, _Left, _Right)).
+memberTree(X, tree(_Y, Left, _Right)) :- memberTree(X, Left).
+memberTree(X, tree(_Y, _Left, Right)) :- memberTree(X, Right).
+
+Dato un nodo ottieni la profondità
+depthconstant(void, _Y, -1).
+depthconstant(tree(X, _Left, _Right), X, 0).
+depthconstant(tree(_X, Left, _Right), Y, N) :- depthconstant(Left, Y, N1), N1>=0, N is N1+1.
+depthconstant(tree(_X, _Left, Right), Y, N) :- depthconstant(Right, Y, N1), N1>=0, N is N1+1.
+
+get elemento di una lista dato l'indice
+
+nthelement([X|_Rest], 0, X).
+nthelement([_X|Rest], N, K) :- N1 is N-1, nthelement(Rest, N1, K).
+
+get ultimo elemento di una lista
+last1([X], X).
+last1([_X|Rest], N) :- last1(Rest, N).
+
+Trasforma una lista in un numero ([1,2,3] -> 123)
+
+digits([], 0, 0).
+digits([X], X, 1).
+digits([X|Rest], N, L) :- lenght1([X|Rest], L), L1 is L-1, digits(Rest, N1, L1), N is N1+X*10^(L-1).
+
+get lunghezza di una lista
+
+len1([], 0).
+len1([X|Rest], N):- len(Rest, N1), N is N1+1.
+
+Controlla se una lista ha almeno un duplicato (T/F)
+dup([X|Rest]):- member1(X, Rest).
+dup([_|Rest]):- dup(Rest).
+
+Prodotto scalare
+scalarbrodo([], [], 0).
+scalarbrodo([X|Rest1], [Y|Rest2], N):- scalarbrodo(Rest1, Rest2, N1), N is (X*Y)+N1.
+
+
+get path di un albero
+
+path(tree(X, _Left, _Right), X, [X]).
+path(tree(X, Left, _Right), Y, [X|Path]):- path(Left, Y, Path).
+path(tree(X, _Left, Right), Y, [X|Path]):- path(Right, Y, Path).
+
+
+get lunghezza path dato un nodo
+
+pathL(tree(X, _Left, _Right), X, 0).
+pathL(tree(_X, Left, _Right), Y, N):- pathL(Left, Y, N1), N is N1+1.
+pathL(tree(_X, _Left, Right), Y, N):- pathL(Right, Y, N1), N is N1+1.

@@ -1,0 +1,119 @@
+	
+	Dates
+	
+	
+(define (domain Dates)
+
+	(:requirements
+	 :strips
+	 :negative-preconditions
+	)
+
+	(:predicates (robot ?x)(date ?x)(position ?x)(at ?x ?y)
+	
+	)
+	
+ (:action exchange
+	:parameters(?r ?d ?from ?to)
+	:precondition(and
+	(robot ?r)
+	(date ?d)
+	(position ?from)
+	(position ?to)
+	(at ?r ?from)
+	(not(at ?r ?to))
+	(at ?d ?to)
+	(not(at ?d ?from))
+	)
+	:effect(and
+	(not(at ?r ?from))
+	(at ?r ?to)
+	(not(at ?d ?to))
+	(at ?d ?from)
+	)
+ )
+)
+
+(define (problem Dates)
+	 (:domain Dates)
+	 (:objects r x0 x1 shop rest0 rest1)
+	 (:init (robot r)(date x0)(date x1)(position shop)(position rest0)(position rest1)
+	 (at r shop)(at x0 rest1)(at x1 rest0)
+	 )
+	 (:goal (and(at r shop)(at x0 rest0)(at x1 rest1))
+	 )
+)
+
+-------------------------------------------
+B)
+	0: exchange(r x1 shop rest0)
+	1: exchange(r x0 rest0 rest1)
+	2: exchange(r x1 rest1 shop)	
+C)
+	initial state:
+	(at r shop)(at x0 rest1)(at x1 rest0)
+	
+	0: exchange(r x1 shop rest0)
+	(at r rest0)(at x1 shop)
+	
+	          Or
+			  
+	0: exchange(r x0 shop rest1)
+	(at r rest1)(at x0 shop)
+	
+	1: exchange(r x0 rest0 rest1)
+	(at r rest1)(at x0 rest0)	
+	
+	          Or
+			  
+	1: exchange(r x1 rest0 shop)
+	(at r shop)(at x1 rest0)
+	
+	2: exchange(r x1 rest1 shop)	
+	(at r shop)(at x1 rest1)
+	
+	          Or
+			  
+	2: exchange(r x rest1 rest0)	
+	(at r rest0)(at x0 rest1)
+	
+D)We start from the goal applying actions backward until we found a sequence of them that leads to the initial state.
+ At each step we consider only relevant or consistent actions. 
+ 
+ goal state:
+		(at r shop)(at x0 rest0)(at x1 rest1)
+		
+ possible action applying backward planning:
+ from state --> (at r rest1)(at x1 shop)(at x0 rest0)
+	exchange(r x1 rest1 shop)	
+	
+	or
+  from state --> (at r rest0)(at x0 shop)(at x1 rest1)
+	exchange(r x0 rest0 shop)
+	
+------------------------------------------------------
+
+2)Discuss the difference between state-space and plan-space planning. Describe the basic approach to plan
+space planning (POP).
+
+State space is a transition from a state A to a state B will be caused by the addition of an action which will follow the action that had led to the state A.
+Instead in the plan space a transition to another node corresponds to inserting an action in the plan that has not to be strictly the following of the previous.
+In this representation actions can be in every point of the plan, without a sequential order.
+
+The POP search procedure proceeds as follows:
+The initial plan is composed only by the Start action and the Finish action, specifying that the start < finish (start comes before then finish)
+Pick the open precondition p of an action B and look for an action A whose effect satisfies p.
+Add the causal link A -> p -> B and specify the ordering A<B (A comes before then B).
+In addition to this if A is a new action add the orderings Start<A, B<Finish
+Run the goal test which would succeeds if there are no more open preconditions.
+Solve conflicts, otherwise backtrack.
+
+3)Describe the Iterative Deepening Search (IDS) algorithm. What are the properties of IDS (completeness,
+optimality, time and space complexity).
+
+The search is an iteration of several depth limited searches, starting from l = 1 and increasing it until the shallowest solution is found. 
+It is complete because (if b(maximum branching factor) is finite, and the state space either has a solution or is finite) 
+it finds a solution acting in a similar way of breadth-first search, 
+finding the shallowest solution, with more state visited but with lower memory occupation at the same time. 
+It is optimal if action costs are all identical.
+The complexity is O(b^d) for time and O(b^d) for memory occupation.
