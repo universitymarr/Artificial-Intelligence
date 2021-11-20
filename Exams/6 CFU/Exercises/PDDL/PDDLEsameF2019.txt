@@ -1,0 +1,40 @@
+(define (domain date)
+ (:requirements
+ :strips
+ )
+ (:predicates (date ?x)(position ?y)(take ?x ?y)
+              (at ?x ?y)(isocc ?y)
+              
+ )
+ 
+ (:action changePos
+  :parameters(?who ?from ?to)
+  :precondition(and
+  (date ?who)
+  (position ?from)
+  (position ?to)
+  (at ?date ?from)
+  (not(at ?date ?to))
+  (not(isocc ?to))
+  (at robot ?to)
+  )
+  :effect(and
+  (not(at ?date ?from))
+  (at ?date ?to)
+  (isocc ?to)
+  (not(isocc ?from))
+  (at robot ?from)
+  )
+ )
+)
+
+(define problem (date)
+(:domain date)
+(:object robot x0 x1 positionMall positionR9 positionR3)
+(:init (position positionR9)(position positionR3)(position positionMall)
+       (date x0)(date x1)
+)
+(:goal (and(at x1 positionR3)(at positionR9))
+)
+)
+

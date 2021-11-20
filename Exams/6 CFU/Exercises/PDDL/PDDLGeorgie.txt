@@ -1,0 +1,83 @@
+(define (domain GC)
+
+ (:requirements
+  :strips                 
+  :negative-preconditions 
+
+ )
+ (:predicates (at ?x ?y)(position ?y)(person ?x)(object ?z)
+              (isfree ?y)(hold ?x ?z)(objpresent ?y ?z)(handsfree ?x)
+              (possiblepos ?x ?y)
+
+ )
+
+ (:action move
+  :parameters(?who ?from ?to)
+  :precondition(and
+  (position ?from)
+  (position ?to)
+  (person ?who) 
+  (isfree ?to)
+  (at ?who ?from)
+  (not(at ?who ?to))
+  (possiblepos ?who ?to)
+  )
+  :effect(and
+  (at ?who ?to)
+  (not(at ?who ?from))
+  (not(isfree ?to))
+  (isfree ?from)
+  )
+ )
+
+ (:action drop
+  :parameters(?who ?what ?where)
+  :precondition(and
+  (person ?who)
+  (object ?what)
+  (position ?where)
+  (at ?who ?where)
+  (hold ?who ?what)
+  (not(handsfree ?who))
+  (not(objpresent ?what ?where))
+  )
+  :effect(and
+  (not(hold ?who ?what))
+  (objpresent ?what ?where)
+  (handsfree ?who)
+  )
+ )
+
+ (:action grab 
+  :parameters(?who ?what ?where)
+  :precondition(and
+  (person ?who)
+  (object ?what)
+  (position ?where)
+  (at ?who ?where)
+  (objpresent ?what ?where)
+  (not(hold ?who ?what))
+  (handsfree ?who)
+  )
+  :effect(and
+  (not(objpresent ?what ?where))
+  (not(handsfree ?who))
+  (hold ?who ?what)
+  )
+ )
+)
+
+(define (problem GC)
+ (:domain GC)
+ (:objects georgie clown baloon boat positionP0 positionP1 positionP2 positionP3
+           positionP4 positionP5 positionP6)
+ (:init (person georgie)(person clown)(object baloon)(object boat)
+        (position positionP0)(position positionP1)(position positionP2)(position positionP3)(position positionP4)(position positionP5)(position positionP6)
+        (at georgie positionP0)(at clown positionP6)(hold georgie boat)(hold clown baloon)
+        (possiblepos georgie positionP0)(possiblepos georgie positionP3)(possiblepos georgie positionP1)
+        (possiblepos clown positionP2)(possiblepos clown positionP4)(possiblepos clown positionP5)(possiblepos clown positionP6)(possiblepos clown positionP1)
+        (isFree positionP1)(isFree positionP2)(isFree positionP3)(isFree positionP4)(isFree positionP5)
+        )
+ (:goal (and(at georgie positionP3)(hold georgie baloon)(at clown positionP5)(hold clown boat))
+  )
+)

@@ -1,0 +1,117 @@
+In agricultural fields robots can be used to assist humans in different tasks.
+An example is a flying drone that is able to detect “weeds” and map their
+presence in the field. To accomplish its task, the drone flies over the zone
+of interest and stores the location of each detected weed. In this way, at
+the end of the survey, it will have a map represented on a 2D grid where for
+each black cell there is a weed. Then, it starts the removal phase by visiting
+each black cell of the grid and by spraying the cell containing the weed, in
+particular, the weeds can be of two type: weeds that can be removed with a
+single spray and weeds that need two sprays to be removed. The drone can
+carry only two doses of spray. If the spray is finished the drone can fly back
+in the initial position ([0,0] i.e. the left bottom cell) and recharge the sprayer.
+The task is completed when all the cells containing weeds have been sprayed
+as needed.
+Consider a field represented by a 3x3 grid with the square [0,0] in the left
+bottom cell. Assume that the mapping phase reported presence of weeds in
+position [2,1] requiring 1 spray and in position [0,2] requiring 2 sprays.
+
+
+(define (domain Agri) 
+
+  (:requirements
+    :strips                 
+    :negative-preconditions 
+  )
+
+  (:predicates
+    (at ?x)(position ?x)(hasOneSpray)(hasTwoSpray)
+    (oneweed ?x)(twoweed ?x)
+  )
+
+ (:action spray1w1
+   :parameters (?oneweed)
+   :precondition (and 
+   (not(at ?oneweed))
+   (oneweed ?oneweed)
+   (hasOneSpray)
+   )
+   :effect(and
+   (not(hasOneSpray))
+   (not(hasTwoSpray))
+   (at ?oneweed)
+   (not(oneweed ?oneweed))
+   )
+  )
+
+(:action spray2w2
+   :parameters (?twoweed)
+   :precondition (and 
+   (not(at ?twoweed))
+   (twoweed ?twoweed)
+   (hasTwoSpray)
+   )
+   :effect(and
+   (not(hasOneSpray))
+   (not(hasTwoSpray))
+   (position ?twoweed)
+   (at ?twoweed)
+   (not(twoweed ?twoweed))
+   )
+  )
+
+(:action spray1w2
+   :parameters (?oneweed)
+   :precondition (and 
+   (not(at ?oneweed))
+   (oneweed ?oneweed)
+   (hasTwoSpray)
+   )
+   :effect(and
+   (hasOneSpray)
+   (not(hasTwoSpray))
+   (at ?oneweed)
+   (not(oneweed ?oneweed))
+   )
+  )
+
+(:action spray2w1
+   :parameters (?twoweed)
+   :precondition (and 
+   (not(at ?twoweed))
+   (twoweed ?twoweed)
+   (hasOneSpray)
+   )
+   :effect(and
+   (not(hasOneSpray))
+   (not(hasTwoSpray))
+   (at ?twoweed)
+   (not(twoweed ?twoweed))
+   (oneweed ?twoweed)
+   )
+  )
+
+(:action rechargedrone
+ :parameters (?pos)
+   :precondition (and 
+   (at ?pos)
+   (not(at recharge00))
+   (not(hasOneSpray))
+   (not(hasTwoSpray))
+   )
+   :effect(and
+   (hasOneSpray)
+   (hasTwoSpray)
+   (position recharge00)
+   (at recharge00)
+   (not(at ?pos))
+  )
+ )
+)
+
+ (define (problem Agri)
+ (:domain Agri)
+ (:objects weed21 weed02 recharge00)
+ (:init (position recharge00)(oneweed weed21)(twoweed weed02)(hasTwoSpray))
+ (:goal (and(not(twoweed weed02))(not(oneweed weed02))(not(oneweed weed21)))
+  )
+)

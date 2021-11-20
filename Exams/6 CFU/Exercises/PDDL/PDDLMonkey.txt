@@ -1,0 +1,93 @@
+
+Monkey, Box, Banana
+
+
+
+(define (domain Monkey) 
+
+  (:requirements
+    :strips                 
+    :negative-preconditions 
+  )
+
+  (:predicates (monkey ?x)  (box ?x) (banana ?x) (at ?x ?y) (position ?x) (isOn ?x ?y) (handFree ?x) 
+    
+  )
+
+ (:action go
+   :parameters (?who ?from ?to)
+   :precondition (and
+   (monkey ?who)
+   (position ?from)
+   (position ?to)
+   (at ?who ?from)
+   (not(at ?who ?to))
+   )
+   :effect(and
+   (at ?who ?to)
+   (not(at ?who ?from))
+   )
+  )
+  
+  (:action move
+   :parameters (?who ?what ?from ?to)
+   :precondition (and
+   (monkey ?who)
+   (box ?what)
+   (position ?from)
+   (position ?to)
+   (at ?who ?from)
+   (not(at ?who ?to))
+   (at ?what ?from)
+   (not(at ?what ?to))
+   (not(isOn ?who ?what))
+   )
+   :effect(and
+   (at ?who ?to)
+   (not(at ?who ?from))
+   (at ?what ?to)
+   (not(at ?what ?from))
+   )
+   )
+   (:action climb
+   :parameters (?who ?what ?from)
+   :precondition (and
+   (monkey ?who)
+   (box ?what)
+   (position ?from)
+   (at ?who ?from)
+   (at ?what ?from)
+   (not(isOn ?who ?what))
+   )
+   :effect(and
+   (isOn ?who ?what)
+   )
+   )
+	(:action grab
+   :parameters (?who ?what ?whatb ?from)
+   :precondition (and
+   (monkey ?who)
+   (box ?what)
+   (banana ?whatb)
+   (position ?from)
+   (at ?who ?from)
+   (at ?what ?from)
+   (at ?whatb ?from)
+   (isOn ?who ?what)
+   (handFree ?who)
+   )
+   :effect(and
+   (not(handFree ?who))
+   (not(at ?whatb ?from))
+   )
+   )
+)
+
+ (define (problem Monkey)
+ (:domain Monkey)
+ (:objects nardi box banana l1 l2 l3)
+ (:init (monkey nardi)(box box)(banana banana)(position l1)(position l2)(position l3)
+ (at nardi l1)(at banana l2)(at box l3)(handFree nardi))
+ (:goal (not(handFree nardi))
+  )
+  )

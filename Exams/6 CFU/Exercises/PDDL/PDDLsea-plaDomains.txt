@@ -1,0 +1,30 @@
+define( domain(2x2)
+(:requirements
+ :strips
+ :negative-preconditions
+ :equality)
+ (:predicates (on ?x ?y)(at ?x ?y ?z)(obj ?x)(row ?y)(column ?z)
+  (Occupedcolumn ?x ?z)(Occupedrow ?x ?y)
+
+ )
+ 
+(:action placeA
+:parameters(?y ?z)
+:precondition(and(not(at a ?x)(row ?r)(column ?c)(not(on a b)(isfreeC a ?cell)(isfreeR a?cell))))
+:effect (and(at a ?cell)(not(isfreeC a ?cell))(not(isfreeR a ?cell))) 
+)
+
+(:action placeB
+:parameters(?cell)
+:precondition (and(not(at a ?x)(cell ?cell)(not(at a ?cell)(isfreeC b ?cell)(isfreeR b ?cell)
+:effect (and(at a ?cell)(not(isfreeC a ?cell))(not(isfreeR a ?cell))) 
+)
+------------------------------
+(define (problem 2x2)
+(:domain 2x2)
+	(:object cell00 cell01 cell10 cell11 a b)
+	(:init (cell cell00)(cell cell01)(cell cell10)(cell cell11)
+	       (row cell00 cell01) (row cell10 cell11)
+	       (column cell00 cell10) (column cell01 cell11)
+               (isfreeC
+	       (isfreeR

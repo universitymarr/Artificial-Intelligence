@@ -1,0 +1,112 @@
+Case
+A mobile manipulator, that can grasp, carry and release objects is in front
+of a shelf with two cases with a lock each. Every case can be opened and
+closed by the manipulator (provided its hand is empty). If the case is locked,
+opening can be done only with the key, that the manipulator can insert in the
+lock to unlock. The robot can also manipulate the keys (grasp, and release
+them on the working area).
+Initially, both keys are available in the working area, the hand of the
+manipulator is free, Case1 is locked and empty, while Case2 is unlocked and
+contains an object. The robot has to move the object from Case2 into Case1,
+which is initially empty, lock it and lock its key in Case2 (the other case).
+
+define(domain(Case)
+(:requirements
+ :strips
+ :negative-preconditions
+ :equality
+)
+ (:predicates (at ?obj ?x)(object ?x)
+	      (position?x)(hasThathObj ?x)(freeHand)
+	      (robot ?x)(case ?x)(caseLock ?x)(open ?x ?y)
+          
+
+ )
+
+ (:action graspObj
+ :parameters(?obj ?pos ?r ?case)
+ :precondition (and
+ (object ?obj)
+ (position ?pos)
+ (robot ?r)
+ (case ?case)
+ (at ?r ?pos)
+ (at ?obj ?pos)
+ (not(hasThatObj ?obj))
+ (not(caseLock ?case))
+ (freeHand)
+ :effect (and
+ (hasObj ?obj)
+ (not(freeHand))
+ ) 
+
+ (:action dropObj
+ :parameters(?obj ?pos ?r ?case)
+ :precondition (and
+ (object ?obj)
+ (position ?pos)
+ (robot ?r)
+ (case ?case)
+ (at ?r ?pos)
+ (hasThatObj ?obj)
+ (not(freeHand))(not(at ?obj ?pos))
+ (not(caseLock ?case)
+ )
+ :effect (and
+ (at ?obj ?pos)
+ (freeHand)
+ (not(hasThatObj ?obj)
+ ) 
+ )
+ (:action moveRobot
+ :parameters(?r ?from ?to)
+ (object ?obj)
+ (position ?from)
+ (position ?to)
+ :precondition (and
+ (at ?r ?from)
+ (not(at ?r ?from))
+ :effect (and
+ (not)at ?r ?from))
+ (at ?r ?to)
+ ) 
+ )
+ (:action lockCase
+ :parameters(?key ?case ?pos ?r)
+ :precondition(and
+  (at ?r ?pos)
+  (at case ?pos)
+  (hasThatObj ?key)
+ (not(caseLock ?case)
+ (openclose ?key ?case)
+ )
+ :effect (
+ (caseLock ?case)
+ )
+ )
+ (:action unlockCase
+ :parameters(?key ?case ?pos ?r)
+ :precondition(and
+ (at ?r ?pos)
+ (at case ?pos)
+ (hasThatObj ?key)
+ (caseLock ?case)
+ (openclose ?key ?case)
+ )
+:effect(and
+(not(caseLock ?case))
+)
+))
+
+------------------------------------------------------------------
+(define(problem case)
+(:domain case)
+(:objects workArea positionCase1 positionCase2 case0 case1 case2 key1 key2 object robot)
+(:init (position workArea)(position positionCase1)(position positionCase2)
+       (case case0)(case case1)(case case2)
+       (robot robot)(object key1)(object key2)(object object)
+       (at r workArea)(at case0 workArea)(at case1 positionCase1)(at case2 positionCase2)(at key1 workArea)(at key2 workArea)(at object positionCase2)
+       (openclose case1 key1)(openclose case2 key2)(caseLock case1)
+)
+(:goal (and
+(caseLock case1)(caseLock case2)(at key1 positionCase2)(at object positionCase1))))

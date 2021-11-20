@@ -2,11 +2,12 @@
 
 |   | Available | Last Update |
 | ------------- | ------------- | ------------ |
-| Exams | Yes | 2019 |
+| Exams | Yes | 2021 |
 | Homework  | No |  |
 | Notes  | No | |
+| Midterm | Yes | 2021|
 | Slides | Yes | 2019 |
-| Book | Yes | |
+| Book | Yes | 2019 |
 
 ## Website of the course
 
