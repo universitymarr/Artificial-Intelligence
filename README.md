@@ -3,8 +3,8 @@
 |   | Available | Last Update |
 | ------------- | ------------- | ------------ |
 | Exams | Yes | 2021 |
-| Homework  | No |  |
-| Notes  | No | |
+| Homework  | No | - |
+| Notes  | No | - |
 | Midterm | Yes | 2021|
 | Slides | Yes | 2019 |
 | Book | Yes | 2019 |
