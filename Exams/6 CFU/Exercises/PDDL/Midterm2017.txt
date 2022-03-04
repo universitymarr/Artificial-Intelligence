@@ -1,0 +1,94 @@
+(define(domain HOTEL-domain)
+    (:predicates (robot ?x)(loc ?x)(adj ?x ?y)(guest-in ?x)(dirty ?x)(at ?x ?y))
+    (:action move
+        :parameters (?robot ?from ?to)
+        :precondition (and(robot ?robot)(loc ?from)(loc ?to)(at ?robot ?from)(adj ?from ?to)
+        (not(guest-in ?to)))
+        :effect (and(at ?robot ?to)(not(at ?robot ?from))))
+    		(:action clean 
+        :parameters (?loc ?robot)
+        :precondition (and(loc ?loc)(robot ?robot)(at ?robot ?loc)(dirty ?loc)
+			(not(guest-in ?loc)))
+        :effect (and(not(dirty ?loc)))
+    )
+        
+)
+
+(define(problem HOTEL-problem)
+    (:domain HOTEL-domain)
+    (:objects  MARRtino sq-11 sq-12 sq-13 sq-21 sq-22 sq-23 
+    sq-31 sq-32 sq-33 sq-41 sq-42 sq-43)
+    
+    (:init
+    
+    (robot MARRtino)
+    (loc sq-11)(loc sq-12)(loc sq-13)(loc sq-21)(loc sq-22)(loc sq-23) 
+    (loc sq-31)(loc sq-32)(loc sq-33)(loc sq-41)(loc sq-42)(loc sq-43)
+    
+    (adj sq-11 sq-21)
+    (adj sq-12 sq-22)
+    (adj sq-13 sq-23)
+    (adj sq-21 sq-11)(adj sq-21 sq-31)(adj sq-21 sq-22)(adj sq-21 sq-32)
+    (adj sq-22 sq-12)(adj sq-22 sq-21)(adj sq-22 sq-23)(adj sq-22 sq-32)(adj sq-22 sq-31)(adj sq-22 sq-33)
+    (adj sq-23 sq-13)(adj sq-23 sq-22)(adj sq-23 sq-32)(adj sq-23 sq-33)
+    (adj sq-31 sq-21)(adj sq-31 sq-22)(adj sq-31 sq-32)(adj sq-31 sq-41)
+    (adj sq-32 sq-31)(adj sq-32 sq-22)(adj sq-32 sq-33)(adj sq-32 sq-23)(adj sq-32 sq-42)
+    (adj sq-33 sq-23)(adj sq-33 sq-22)(adj sq-33 sq-32)(adj sq-33 sq-43)
+    (adj sq-41 sq-31)
+    (adj sq-42 sq-32)
+    (adj sq-43 sq-33)
+    
+    
+    (at MARRtino sq-21)
+    (dirty sq-12)(dirty sq-41)(dirty sq-43)(guest-in sq-11)(guest-in sq-13)(guest-in sq-41)
+    (guest-in sq-42))
+    (:goal (and(not(dirty sq-12))(not(dirty sq-43))))
+)
+
+
+
+
+;;;;;;;;;;;;;;;;;;;EXERCISE B;;;;;;;;;;;;
+
+(define (domain MUSEUM-domain)
+	(:predicates  (at ?x ?y)(robot ?x)(tourist ?x)(adjcell ?x ?y)(lightoff ?x)(thereIsWater ?x)(pos ?x))
+
+	(:action MOVE
+	:parameters (?who ?from ?to)
+	:precondition(and (at ?who ?from)(pos ?from)(pos ?to)(robot ?who?)(adjcell ?from ?to)(not(thereIsWater ?to))
+		)
+	:effect(and(not(at ?who ?from))(at ?who ?to)
+		)
+	)
+
+	(:action TURNONLIGHT
+	:parameters(?who ?where)
+	:precondition(and (robot ?who)(pos ?where)(at ?who ?where)(lightoff ?where)(not(thereIsWater ?where))
+		)
+	:effect(and(not(lightoff ?where))
+		)
+	)
+	
+	(:action SPEAK
+	:parameters(?who ?where)
+	:precondition(and(not(thereIsWater ?where))(robot ?who)(pos ?where)(at ?who ?where)(tourist ?where)
+		)
+	:effect(and(not(tourist ?where))
+		)		
+	)
+) 
+
+(define (problem MUSEUM-problem)
+	(:domain MUSEUM-domain)
+	(:objects p00 p01 p02 p03 p10 p11 p12 p13 MarrTino)
+	(:init (robot MarrTino)(at MarrTino p10)(pos p10)(pos p11)(pos p12)(pos p13)(pos p00)(pos p01)(pos p02)(pos p03)
+			(tourist p00)(tourist p02)(tourist p12)(lightoff p11)(thereIsWater p01)
+			(adjcell p00 p01)(adjcell p01 p00)(adjcell p00 p10)
+			(adjcell p10 p00)(adjcell p01 p02)(adjcell p02 p01)
+			(adjcell p02 p03)(adjcell p03 p02)(adjcell p03 p13)
+			(adjcell p13 p03)(adjcell p10 p11)(adjcell p11 p10)
+			(adjcell p11 p12)(adjcell p12 p11)(adjcell p12 p13)
+			(adjcell p13 p12)
+	)
+	(:goal(and(not(tourist p00))(not(tourist p02))(not(tourist p12))(not(lightoff p11))))
+)
