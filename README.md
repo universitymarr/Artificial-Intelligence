@@ -4,7 +4,7 @@
 | ------------- | ------------- | ------------ |
 | Exams | Yes | 2021 |
 | Homework  | No | - |
-| Notes  | No | - |
+| Notes  | Yes | Mar 2021 |
 | Midterm | Yes | 2021|
 | Slides | Yes | 2019 |
 
