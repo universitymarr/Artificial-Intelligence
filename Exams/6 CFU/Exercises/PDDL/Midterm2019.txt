@@ -1,0 +1,97 @@
+(define (domain CLOWN-domain)
+	(:predicates (at ?x ?y)(pos ?x)(player ?x)(has ?x ?x)(toy ?x)
+						(g_path ?x)(c_path ?x)(occupied_hand ?x))
+
+	(:action MOVEG
+	:parameters( ?from ?to)
+	:precondition(and(at G ?from)(g_path ?to)
+						(pos ?from)(pos ?to)(not(at C ?to))
+		)
+	:effect(and (not(at G ?from))(at G ?to)
+		)
+	)
+
+	(:action MOVEC
+	:parameters( ?from ?to)
+	:precondition(and(at C ?from)(c_path ?to)
+						(pos ?from)(pos ?to)(not(at G ?to))
+
+		)
+	:effect(and (not(at C ?from))(at C ?to)
+		)
+	)
+	
+	(:action LEAVE
+	:parameters(?where ?who ?what )
+	:precondition(and(at ?who ?where)(toy ?what)(player ?who)(occupied_hand ?who)
+	             (pos ?where)(has ?who ?what)(and(c_path ?where)(g_path ?where))
+		)
+	:effect(and(not(has ?who ?what))(at ?what ?where)(not(occupied_hand ?who))
+		)
+	)
+	
+	(:action GRASP
+	:parameters( ?who ?where ?what)
+	:precondition(and(at ?who ?where)(toy ?what)(player ?who)
+						(pos ?where)(at ?what ?where)(not(occupied_hand ?who))
+		)
+	:effect(and(not(at ?what ?where))(has ?who ?what)
+		)
+	)
+) 
+
+(define (problem CLOWN-problem)
+	(:domain CLOWN-domain)
+	(:objects G C p0 p1 p2 p3 p4 p5 p6 B_a B_0)
+	(:init  (player G)(player C)(has G B_0)(has C B_a)(toy B_0)
+			(toy B_a)(g_path p0)(g_path p1)(g_path p3)
+			(c_path p1)(c_path p2)(c_path p4)(c_path p5)(c_path p6)
+			(pos p0)(pos p1)(pos p2)(pos p3)(pos p4)(pos p5)(pos p6)
+			(at G p0)(at C p6)(occupied_hand G)(occupied_hand C)
+	)
+	(:goal(and (at G p3)(has G B_a)(at C p5)(has C B_0)
+	))
+)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;EXERCISE B;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+	(:action MOVEG
+	:parameters( ?from ?to)
+	:precondition(and(at G ?from)(g_path ?to)
+						(pos ?from)(pos ?to)
+		)
+	:effect(and (not(at G ?from))(at G ?to)
+		)
+	)
+
+	(:action MOVEC
+	:parameters( ?from ?to)
+	:precondition(and(at C ?from)(c_path ?to)
+						(pos ?from)(pos ?to)
+
+		)
+	:effect(and (not(at C ?from))(at C ?to)
+		)
+	)
+
+
+	(:action MOVEG
+	:parameters( ?from ?to)
+	:precondition(and(at G ?from)(g_path ?to)
+						(pos ?from)(pos ?to)
+		)
+	:effect(and (not(at G ?from))(at G ?to)
+		)
+	)
+
+	(:action MOVEC
+	:parameters( ?from ?to)
+	:precondition(and(at C ?from)(c_path ?to)
+						(pos ?from)(pos ?to)
+
+		)
+	:effect(and (not(at C ?from))(at C ?to)
+		)
+	)
