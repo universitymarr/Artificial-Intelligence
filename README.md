@@ -6,7 +6,7 @@
 | Homework  | No | - |
 | Notes  | Yes | Mar 2021 |
 | Midterm | Yes | 2021|
-| Slides | Yes | 2019 |
+| Slides | Yes | 2021 |
 
 ## Website of the course
 
