@@ -1,0 +1,20 @@
+Exercise 1
+	1.1 model matryoshka doll problem with state space representation and its variable
+	1.2 heuristic from this problem
+	1.3 find a plan to solve this problem
+	1.4 Execute A* up to the second level
+
+	note: in februrary, same exercise but with frogs: https://www.youtube.com/watch?v=R8wkhae4Pvg
+
+Exercise 2
+	2.1 Apply MinMax algorithm on a tree
+	2.2 Execute Alpha-Beta pruning -> write ALL variables
+	2.3 Time complexity of MinMax and how much advantage we have with AlphaBeta pruning repsect to MinMax
+
+Exercise 3
+	3.1 First Order Logic -> transform NLP to CNF, later apply resolution
+	3.2 Proof unification of two formula:  f( f(Y), W ,  g(Z, Y) ) unify f(X,X,g(Z,a) )?
+	    Show the unification process
+	
+
+NOTE: I cannot remember all exercise, this is the general scheme used by the prof
