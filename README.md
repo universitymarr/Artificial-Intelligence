@@ -2,7 +2,7 @@
 
 |   | Available | Last Update |
 | ------------- | ------------- | ------------ |
-| Exams | Yes | 2024 |
+| Exams | Yes | 2025 |
 | Homework  | No | - |
 | Notes  | Yes | Mar 2021 |
 | Midterm | Yes | 2021|
